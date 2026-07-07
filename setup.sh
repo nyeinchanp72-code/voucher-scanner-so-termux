@@ -1,30 +1,15 @@
 #!/bin/bash
 
-echo "Updating and upgrading Termux packages..."
+echo "🚀 Setting up Voucher Scanner for Termux..."
+
+# Update and install dependencies
 pkg update && pkg upgrade -y
+pkg install python clang make libjpeg-turbo -y
 
-echo "Installing Python and required packages..."
-pkg install python -y
-pkg install clang make libjpeg-turbo -y
+# Install Python requirements
+echo "📦 Installing Python libraries (this may take a few minutes)..."
+pip install aiohttp ping3 requests opencv-python ddddocr numpy pycryptodome pyarmor
 
-echo "Installing Python libraries..."
-pip install cython requests aiohttp ping3 opencv-python ddddocr numpy pycryptodome
-
-echo "Compiling the script for Termux..."
-cat <<EOF > setup_termux.py
-from setuptools import setup
-from Cython.Build import cythonize
-setup(
-    ext_modules = cythonize("scanner.py", compiler_directives={'language_level': "3"})
-)
-EOF
-
-python setup_termux.py build_ext --inplace
-
-echo "Cleaning up..."
-rm scanner.py
-rm scanner.c
-rm setup_termux.py
-rm -rf build/
-
-echo "Done! You can now run the tool using 'python -c \"import scanner; scanner.main()\"' if it has a main function, or use a runner script."
+echo "✅ Dependencies installed."
+echo "✅ Setup complete! You can now run the tool."
+echo "🚀 Use: python run.py"
